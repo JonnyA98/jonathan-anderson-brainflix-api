@@ -2,6 +2,8 @@ const express = require("express");
 const fs = require("fs");
 const router = express.Router();
 
+router.use(express.json());
+
 router.get("/", (req, res) => {
   fs.readFile("./data/videos.json", (err, data) => {
     if (err) {
@@ -30,5 +32,7 @@ router.get("/:id", (req, res) => {
     res.json(selectedVideo);
   });
 });
+
+router.post("/comments");
 
 module.exports = router;
