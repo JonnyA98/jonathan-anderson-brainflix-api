@@ -23,11 +23,12 @@ router.post("/", (req, res) => {
     title: title,
     channel: channel,
     description: description,
-    imgage: image,
+    image: image,
     views: 0,
     likes: 0,
     duration: duration,
     timestamp: new Date().getTime(),
+    comments: [],
   };
 
   fs.readFile("./data/videos.json", (err, data) => {
@@ -54,6 +55,7 @@ router.post("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
   const videoId = req.params.id;
+  console.log(videoId);
   fs.readFile("./data/videos.json", (err, data) => {
     if (err) {
       return res.status(500).json({
@@ -62,12 +64,14 @@ router.get("/:id", (req, res) => {
       });
     }
     const videos = JSON.parse(data);
-    const selectedVideo = videos.filter((video) => video.id === videoId);
+    console.log(videos);
+    const selectedVideo = videos.find((video) => video.id === videoId);
+    console.log(selectedVideo);
 
     res.json(selectedVideo);
   });
 });
 
-router.post("/comments");
+// router.post("/comments");
 
 module.exports = router;

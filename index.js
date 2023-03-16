@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const videos = require("./routes/videos");
 const cors = require("cors");
+require("dotenv").config();
+app.use(express.static("public"));
 
 app.use(express.json());
 app.use(cors({ origin: process.env.FRONTEND_URL }));
