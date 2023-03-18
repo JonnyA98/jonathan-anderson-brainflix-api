@@ -104,6 +104,4 @@ router.post("/:id/comments", (req, res) => {
   });
 });
 
-// router.post("/comments");
-
 module.exports = router;
