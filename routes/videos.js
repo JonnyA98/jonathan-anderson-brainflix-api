@@ -55,7 +55,6 @@ router.post("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
   const videoId = req.params.id;
-  console.log(videoId);
   fs.readFile("./data/videos.json", (err, data) => {
     if (err) {
       return res.status(500).json({
@@ -64,11 +63,44 @@ router.get("/:id", (req, res) => {
       });
     }
     const videos = JSON.parse(data);
-    console.log(videos);
+
     const selectedVideo = videos.find((video) => video.id === videoId);
-    console.log(selectedVideo);
 
     res.json(selectedVideo);
+  });
+});
+
+router.post("/:id/comments", (req, res) => {
+  const videoID = req.params.id;
+  const { name, comment } = req.body;
+  const newComment = {
+    id: uuid(),
+    name: name,
+    comment: comment,
+    likes: 0,
+    timestamp: new Date().getTime(),
+  };
+
+  fs.readFile("./data/videos.json", (err, data) => {
+    if (err) {
+      return res.status(500).json({
+        error: true,
+        message: "Could not read videos from JSON file",
+      });
+    }
+    const videos = JSON.parse(data);
+    const selectedVideo = videos.find((video) => video.id === videoID);
+    selectedVideo.comments.push(newComment);
+
+    fs.writeFile("./data/videos.json", JSON.stringify(videos), (err) => {
+      if (err) {
+        return res.status(500).json({
+          error: true,
+          message: "Could not read videos",
+        });
+      }
+    });
+    res.status(201).json(newComment);
   });
 });
 
